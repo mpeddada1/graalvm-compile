@@ -5,13 +5,8 @@ import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 public class MyFeature implements Feature {
 
-    private static final String GOOGLE_API_CLIENT_CLASS =
-            "com.google.api.client.googleapis.services.json.AbstractGoogleJsonClient";
-
-    private static final String GOOGLE_API_CLIENT_REQUEST_CLASS =
-            "com.google.api.client.googleapis.services.json.AbstractGoogleJsonClientRequest";
-
-    private static final String GENERIC_JSON_CLASS = "com.google.api.client.json.GenericJson";
+    private static final String SOME_EXAMPLE_CLASS =
+            "com.example.SomeExample";
 
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
@@ -20,17 +15,13 @@ public class MyFeature implements Feature {
 
 
     private void loadRandomClasses(BeforeAnalysisAccess access) {
-        Class<?> googleApiClientClass = access.findClassByName(GOOGLE_API_CLIENT_CLASS);
+        Class<?> someExampleClass = access.findClassByName(SOME_EXAMPLE_CLASS);
 
         // Calling some reflection code to check how provided/compile scope for graal-sdk impacts the code.
-        if (googleApiClientClass!=null) {
+        if (someExampleClass!=null) {
             access.registerSubtypeReachabilityHandler(
                     (duringAccess, subtype) -> registerClassForReflection(access, subtype.getName()),
-                    googleApiClientClass);
-            access.registerSubtypeReachabilityHandler(
-                    (duringAccess, subtype) -> registerClassForReflection(access, subtype.getName()),
-                    access.findClassByName(GOOGLE_API_CLIENT_REQUEST_CLASS));
-
+                    someExampleClass);
         }
     }
 
